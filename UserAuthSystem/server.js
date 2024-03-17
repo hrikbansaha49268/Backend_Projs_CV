@@ -17,15 +17,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(authroutes);
 
-// Template engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 
 // Route to Homepage
 app.get("/", (req, res) => {
     try {
-        res.status(200).render("layout.ejs");
+        res.status(200).sendFile(path.join(__dirname, '/public/index.html'));
     } catch (error) {
         res.status(500).send("Internal Server Error");
         console.log(error);
