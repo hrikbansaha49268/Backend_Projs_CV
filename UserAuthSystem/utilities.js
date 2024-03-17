@@ -9,7 +9,7 @@ function generateHashedPassword(pass) {
         return hashedPass;
     } catch (error) {
         console.log(error);
-    }
+    };
 };
 
 function checkPassword(pass, hashedPass) {
