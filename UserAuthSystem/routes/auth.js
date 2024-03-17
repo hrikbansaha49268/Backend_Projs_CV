@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const utility = require('../utilities');
-const db = require('../databse');
+const utility = require('../utilities/passwordUtils');
+const db = require('../utilities/databse');
 
 const authroutes = Router();
 
