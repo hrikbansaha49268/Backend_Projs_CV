@@ -14,25 +14,42 @@
         border-style: none;
     }
 
+    .title {
+        text-align: center;
+    }
+
     .authbox {
         display: flex;
         justify-content: space-around;
         width: 100%;
-        height: 100%;
+        height: 100vh;
     }
 
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px 0;
-        height: 100%;
-    }
-
-    .signup,
-    .login {
+    .login,
+    .signup {
         width: 100%;
         height: 100%;
         padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .inp-box {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 10px 0;
+    }
+
+    .login {
+        border-left: 1px solid black;
+    }
+
+    .signup {
+        border-right: 1px solid black;
     }
 
     input {
@@ -63,14 +80,20 @@
 <body>
     <section class="authbox">
         <form action="/signup" class="signup" method="post">
-            <input type="text" name="username" placeholder="Enter your username" id="signup-username">
-            <input type="password" name="password" placeholder="Enter your Password" id="signup-password">
-            <input type="submit" value="Create Account">
+            <h1 class="title">Signup</h1>
+            <div class="inp-box">
+                <input type="text" name="username" placeholder="Enter your username" id="signup-username">
+                <input type="password" name="password" placeholder="Enter your Password" id="signup-password">
+                <input type="submit" value="Create Account">
+            </div>
         </form>
         <form action="/login" class="login" method="post">
-            <input type="text" name="username" placeholder="Enter your username" id="login-username">
-            <input type="password" name="password" placeholder="Enter your Password" id="login-password">
-            <input type="submit" value="Login">
+            <h1 class="title">Login</h1>
+            <div class="inp-box">
+                <input type="text" name="username" placeholder="Enter your username" id="login-username">
+                <input type="password" name="password" placeholder="Enter your Password" id="login-password">
+                <input type="submit" value="Login">
+            </div>
         </form>
     </section>
 </body>
