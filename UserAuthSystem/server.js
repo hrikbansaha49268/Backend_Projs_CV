@@ -28,6 +28,14 @@ app.get("/", (req, res) => {
     };
 });
 
+app.get("/secured/:id", (req, res) => {
+    const userid = req.params.id;
+    const userData = db.User.findById(userid);
+    console.log(userData.username);
+    // res.status(200).send(`<h1>${userData.username}</h1>`);
+    res.status(200).send({ da: userData });
+});
+
 
 // Starting the server with db connection
 app.listen(PORT, () => {

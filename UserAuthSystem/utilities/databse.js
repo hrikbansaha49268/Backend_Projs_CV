@@ -13,6 +13,7 @@ const dbConnector = async () => {
 };
 
 const User = new mongoose.Schema({
+    email: String,
     username: String,
     password: String,
     createdAt: {
