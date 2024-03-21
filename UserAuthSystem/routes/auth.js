@@ -4,22 +4,38 @@ const db = require('../utilities/databse');
 
 const authroutes = Router();
 
+
 authroutes.post("/signup", async (req, res, next) => {
     try {
-        const password = utility.generateHashedPassword(req.body.password);
-        const user = new db.User({
-            email: req.body.email,
-            username: req.body.username,
-            password: password,
+        const themailexists = await db.User.exists({
+            email: req.body.email
         });
-        await user.save();
-        res.status(200).redirect(`/secured?id=${user._id}`);
+        if (themailexists) {
+            req.flash(
+                'error',
+                {
+                    msg: "This user already exists. Please use another email."
+                });
+            res.redirect("/");
+        } else {
+            const password = utility.generateHashedPassword(req.body.password);
+            const user = new db.User({
+                email: req.body.email,
+                username: req.body.username,
+                password: password,
+            });
+            await user.save();
+            res.status(200).redirect(`/secured/${user._id}`);
+            next();
+        };
     } catch (error) {
         res.status(500).send("Internal Server Error");
         res.end();
         console.log(error);
     };
 });
+
+// authroutes.get("/signup", (req, res, next) => { })
 
 authroutes.post("/login", async (req, res, next) => {
     try {
