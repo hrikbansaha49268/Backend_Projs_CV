@@ -5,91 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" type="text/css">
   <title>Auther</title>
 </head>
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    border-style: none;
-  }
-
-  .title {
-    text-align: center;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  }
-
-  .authbox {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    height: 100vh;
-  }
-
-  .login,
-  .signup {
-    width: 100%;
-    height: 100%;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .inp-box {
-    width: 100%;
-    height: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 10px 0;
-  }
-
-  .login {
-    border-left: 1px solid black;
-  }
-
-  .signup {
-    border-right: 1px solid black;
-  }
-
-  input {
-    padding: 20px 12px;
-    margin: 0 auto;
-    outline: none;
-  }
-
-  input[type="text"],
-  input[type="password"],
-  input[type="email"] {
-    width: 80%;
-    background-color: cornsilk;
-  }
-
-  input[type="submit"] {
-    width: 40%;
-    cursor: pointer;
-    color: white;
-  }
-
-  .signup input[type="submit"] {
-    background-color: green;
-  }
-
-  .login input[type="submit"] {
-    background-color: red;
-  }
-</style>
-
 <body>
-  <% if (messages.error) { %>
-  <div class="alert alert-danger" role="alert">
-    <% messages.error.forEach(element => { %>
-    <%= element.msg %>
-    <% }) %>
-  </div>
-  <% } %>
+  <%- include('./partials/error.ejs') %>
   <section class="authbox">
     <%- include('./partials/login_form') %>
     <%- include('./partials/signup_form') %>

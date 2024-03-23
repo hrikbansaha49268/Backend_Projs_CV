@@ -53,8 +53,12 @@ authroutes.post("/login", async (req, res, next) => {
                 res.end();
             }
         } else {
-            res.status(404).send("User not found");
-            res.end();
+            req.flash(
+                'error',
+                {
+                    msg: "This user doesn't exist. Please Sign up for that"
+                });
+            res.redirect("/");
         }
     } catch (error) {
         res.status(500).send("Internal Server Error", error);

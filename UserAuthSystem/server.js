@@ -7,6 +7,7 @@ const cors = require('cors');
 const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const { securedRoute } = require("./routes/secured");
 /* Imports */
 
 
@@ -18,7 +19,6 @@ const URL = "http://localhost" || "http://192.168.0.177";
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
 app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
@@ -27,8 +27,12 @@ app.use(session({
     cookie: { maxAge: 60000 }
 }));
 app.use(flash());
+app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
-app.use(authroutes);
+
+// Using routes
+/* 1. Authentication Route */ app.use(authroutes);
+/* 2. Secured Route */ app.use(securedRoute);
 
 
 // Route to Homepage
@@ -41,27 +45,6 @@ app.get("/", (req, res) => {
     };
 });
 
-app.get("/secured/:id", async (req, res) => {
-    try {
-        const userid = req.params.id;
-        const userData = await db.User.findById(userid);
-        res.status(200).render('secured', { username: userData._doc.username, error: false });
-    } catch (error) {
-        res.status(500).send("Internal Server Error");
-        console.log(error);
-    };
-});
-
-app.get("/secured", async (req, res) => {
-    try {
-        const userid = req.params.id;
-        const userData = await db.User.findById(userid);
-        res.status(200).render('secured', { username: userData._doc.username, error: false });
-    } catch (error) {
-        res.status(500).send("Internal Server Error");
-        console.log(error);
-    };
-});
 
 
 // Starting the server with db connection
