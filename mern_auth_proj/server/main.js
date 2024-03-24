@@ -4,12 +4,22 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const jwt = require('jsonwebtoken');
 
+// TODO: Introduce hashing algo for password.
+// TODO: Fix the frontend and make it totally dynamic.
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+require('dotenv').config();
 
-mongoose.connect('mongodb+srv://hrikbans:looper@cluster0.jydd6pg.mongodb.net/mern-stack-auth?retryWrites=true&w=majority&appName=Cluster0');
+const connectMongo = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('DB Connected');
+    } catch (error) {
+        console.log('DB not connected', error);
+    };
+};
 
 app.get("/", (req, res) => {
     res.status(200).send({ "msg": "Hello World" });
@@ -78,5 +88,6 @@ app.post('/api/quote', async (req, res) => {
 });
 
 app.listen(8080, () => {
+    connectMongo();
     console.log(`Server started on http://localhost:${8080}`)
 });
