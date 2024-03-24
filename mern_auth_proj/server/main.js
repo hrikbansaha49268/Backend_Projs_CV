@@ -42,6 +42,41 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+app.get('/api/quote', async (req, res) => {
+    try {
+        const token = req.headers['x-access-token'];
+        const decoded = jwt.verify(token, 'Dhakuria');
+
+        const email = decoded.email;
+
+        const user = await User.findOne({ email: email });
+        return { status: 'ok', quote: user.quote };
+    } catch (error) {
+        console.log(error);
+        res.status(498).json({ status: 'error', error: 'invalid token' });
+    }
+});
+
+
+app.post('/api/quote', async (req, res) => {
+    try {
+        const token = req.headers['x-access-token'];
+        const decoded = jwt.verify(token, 'Dhakuria');
+
+        const email = decoded.email;
+
+        const user = await User.updateOne(
+            { email: email },
+            { $set: { quote: req.body.quote } }
+        );
+
+        return res.status(200).json({ status: 'ok' });
+    } catch (error) {
+        console.log(error);
+        res.status(498).json({ status: 'error', error: 'invalid token' });
+    }
+});
+
 app.listen(8080, () => {
     console.log(`Server started on http://localhost:${8080}`)
 });
