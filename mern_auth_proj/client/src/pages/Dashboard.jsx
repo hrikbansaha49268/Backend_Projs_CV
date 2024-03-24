@@ -1,35 +1,43 @@
-import React, { useEffect } from 'react';
-import jwt from 'jsonwebtoken';
-import { useNavigate } from 'react-router-dom';
+import { decodeToken } from 'react-jwt';
+import { useNavigation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 
 const Dashboard = () => {
 
-    const history = useNavigate();
+    const history = useNavigation();
 
-    populateQuote = async () => {
-        const resp = await fetch('http://localhost:8080/api/quote', {
-            headers: { 'x-access-token': localStorage.getItem('token') }
-        });
-        const data = await resp.json();
-        console.log(data);
-    };
+    async function populateQuote() {
+        const req = await fetch('http://localhost:8080/api/quote', {
+            headers: {
+                'x-access-token': localStorage.getItem('token'),
+            },
+        })
+
+        const data = await req.json()
+        if (data.status === 'ok') {
+            setQuote(data.quote)
+        } else {
+            alert(data.error)
+        }
+    }
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token')
         if (token) {
-            const user = jwt.decode(token);
+            const user = decodeToken(token);
             if (!user) {
-                localStorage.removeItem('token');
-                history('/login', { replace: true });
+                localStorage.removeItem('token')
+                history.replace('/login')
             } else {
-                populateQuote();
+                populateQuote()
             }
-        };
+        }
     }, []);
 
     return (
-        <div>Dashboard</div>
-    );
-};
+        <div>Dashboard
+        </div>
+    )
+}
 
-export default Dashboard;
+export default Dashboard
