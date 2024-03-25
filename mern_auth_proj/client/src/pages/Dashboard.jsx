@@ -9,7 +9,7 @@ const Dashboard = () => {
     const [tempQuote, setTempQuote] = useState('');
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token');
         if (token) {
             const user = decodeToken(token);
             if (!user) {
@@ -18,6 +18,8 @@ const Dashboard = () => {
             } else {
                 populateQuote();
             };
+        } else {
+            window.location.href = '/login';
         };
     }, []);
 

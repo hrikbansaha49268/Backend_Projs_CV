@@ -52,6 +52,10 @@ function Login() {
                 <br />
                 <input className='bg-blue-600 text-white w-1/4 h-12 self-center rounded-md cursor-pointer'
                     type="submit" value="Login" />
+                <div className="flex w-1/2 mx-auto gap-x-6 justify-center mt-6">
+                    <p className='italic'>Don't have an account?</p>
+                    <a href='/register' className='text-blue-800 underline'>Create One</a>
+                </div>
             </form>
         </>
     )

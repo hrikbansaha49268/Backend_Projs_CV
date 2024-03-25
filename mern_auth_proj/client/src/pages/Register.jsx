@@ -48,6 +48,10 @@ function Register() {
         <br />
         <input className='bg-blue-600 text-white w-1/4 h-12 self-center rounded-md cursor-pointer' type="submit" value="Register" />
       </form>
+      <div className="flex w-1/2 mx-auto gap-x-6 justify-center mt-6">
+        <p className='italic'>Already have an account?</p>
+        <a href='/login' className='text-blue-800 underline'>Sign In</a>
+      </div>
     </>
   );
 };
