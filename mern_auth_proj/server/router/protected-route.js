@@ -9,10 +9,9 @@ protectedRouter.get('/api/quote', async (req, res) => {
         const token = req.headers['x-access-token'];
         const decoded = tokenVerification(token);
         const email = decoded.email;
-        // TODO: Move quotes to another collection name it 'quotes-data'
+        // TODO: Fix update quote
         const user = await Quotes.findOne({ email: email });
-        console.log(user.quotes);
-        return { status: 'ok', quotes: user.quotes };
+        res.status(200).json({ status: 'ok', quotes: user.quotes });
     } catch (error) {
         console.log(error);
         res.status(498).json({ status: 'error', error: 'invalid token' });

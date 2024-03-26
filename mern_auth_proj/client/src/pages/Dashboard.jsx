@@ -29,7 +29,6 @@ const Dashboard = () => {
         });
         const data = await req.json();
         if (data.status === 'ok') {
-            console.log(data.quotes);
             setQuote([...data.quotes]);
         } else {
             alert(data.error);
@@ -68,13 +67,12 @@ const Dashboard = () => {
             <h1 className='text-5xl text-center flex justify-center items-center h-[20vh] uppercase font-extrabold tracking-wide font-serif text-blue-800'>
                 Your quote
             </h1>
-            {quotes.length > 0 ?
-                quotes.forEach(e => <h1
-                    className='text-center italic'>
-                    {e.quote}
-                </h1>) :
-                "NO QUOTE FOUND"}
             <button className='bg-blue-600 absolute left-4 top-4 text-white px-6 py-2 self-center rounded-md' onClick={logoutSession}>Logout</button>
+            {quotes.map((e, i) => {
+                return (
+                    <h1 key={i}>{e.quote}</h1>
+                );
+            })}
             <form className='flex flex-col justify-around h-1/2 w-1/3 mx-auto' onSubmit={updateQuote}>
                 <input className='py-4 pl-4 outline-none border-b border-blue-600 placeholder:text-blue-600 focus:bg-blue-600 focus:bg-opacity-5'
                     type="text"

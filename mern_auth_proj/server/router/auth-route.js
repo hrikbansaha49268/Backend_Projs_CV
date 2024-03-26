@@ -15,9 +15,11 @@ authRouter.post('/api/register', async (req, res) => {
                 email: req.body.email,
                 password: passwordHasher(req.body.password)
             });
-            await Quotes.create({
+            user.save();
+            const user_quotes = await Quotes.create({
                 email: req.body.email
             });
+            user_quotes.save();
             res.status(200).send({ status: 'ok', user: user });
         } catch (error) {
             res.status(500).json({ status: 'error', error: 'Internal Server Error' });
