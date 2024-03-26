@@ -1,13 +1,14 @@
 const { Router } = require('express');
 const User = require('../Database/models/User');
 const jwt = require('jsonwebtoken');
+const { tokenVerification } = require('../utilities/tokenization');
 
 const protectedRouter = Router();
 
 protectedRouter.get('/api/quote', async (req, res) => {
     try {
         const token = req.headers['x-access-token'];
-        const decoded = jwt.verify(token, 'Dhakuria');
+        const decoded = tokenVerification(token);
         const email = decoded.email;
         // TODO: Move quotes to another collection name it 'quotes-data'
         const user = await User.findOne({ email: email });
@@ -15,14 +16,14 @@ protectedRouter.get('/api/quote', async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(498).json({ status: 'error', error: 'invalid token' });
-    }
+    };
 });
 
 
 protectedRouter.post('/api/quote', async (req, res) => {
     try {
         const token = req.headers['x-access-token'];
-        const decoded = jwt.verify(token, 'Dhakuria');
+        const decoded = tokenVerification(token);
         const email = decoded.email;
         await User.updateOne(
             { email: email },
