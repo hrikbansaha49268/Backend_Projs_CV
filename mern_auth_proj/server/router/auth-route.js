@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const authRouter = Router();
 
-// TODO: Tokenization and Password hashing needs tobe shifted in another folder
+// TODO: Tokenization and Password hashing needs to be shifted in another folder
 
 authRouter.post('/api/register', async (req, res) => {
     const SALT = bcrypt.genSaltSync(10);
