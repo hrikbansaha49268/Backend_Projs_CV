@@ -15,8 +15,8 @@ function tokenVerification(tokenItem) {
         return token;
     } catch (error) {
         throw new Error(error);
-    }
-}
+    };
+};
 
 
 module.exports = { tokenSign, tokenVerification };

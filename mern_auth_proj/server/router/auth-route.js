@@ -1,19 +1,22 @@
 const { Router } = require('express');
 const User = require('../Database/models/User');
-const jwt = require('jsonwebtoken');
-const { passwordHasher, passwordChecker } = require('../utilities/passwordUtil');
+const Quotes = require('../Database/models/Quotes');
 const { tokenSign } = require('../utilities/tokenization');
+const { passwordHasher, passwordChecker } = require('../utilities/passwordUtil');
 
 const authRouter = Router();
 
 authRouter.post('/api/register', async (req, res) => {
     const userExists = await User.exists({ email: req.body.email });
-    if (userExists) {
+    if (!userExists) {
         try {
             const user = await User.create({
                 name: req.body.name,
                 email: req.body.email,
                 password: passwordHasher(req.body.password)
+            });
+            await Quotes.create({
+                email: req.body.email
             });
             res.status(200).send({ status: 'ok', user: user });
         } catch (error) {
@@ -29,7 +32,7 @@ authRouter.post('/api/login', async (req, res) => {
     if (user) {
         const isPasswordCorrect = passwordChecker({ plainPass: req.body.password, hashedPass: user.password });
         if (isPasswordCorrect) {
-            res.status(200).send({ status: 'ok', user: tokenSign() });
+            res.status(200).send({ status: 'ok', user: tokenSign({ email: req.body.email, name: user.name }) });
         } else {
             res.status(401).json({ status: 'error', user: false });
         };
