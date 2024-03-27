@@ -33,7 +33,6 @@ const Dashboard = () => {
         };
     };
 
-
     async function updateQuote(event) {
         event.preventDefault();
         const req = await fetch('http://localhost:8080/api/quote', {
@@ -66,7 +65,10 @@ const Dashboard = () => {
             <h1 className='text-5xl text-center flex justify-center items-center h-[20vh] uppercase font-extrabold tracking-wide font-serif text-blue-800'>
                 Your quote
             </h1>
-            <button className='bg-blue-600 absolute left-4 top-4 text-white px-6 py-2 self-center rounded-md' onClick={logoutSession}>Logout</button>
+            <button className='bg-blue-600 absolute left-4 top-4 text-white px-6 py-2 self-center rounded-md'
+                onClick={logoutSession}>
+                Logout
+            </button>
             {quotes.map((e, i) => {
                 return (
                     <h1 key={i}>{e.quote}</h1>

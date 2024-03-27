@@ -11,7 +11,12 @@ const App = () => {
         {
             path: "/",
             element: <Home />
-        }, {
+        },
+        {
+            path: "/about",
+            element: <Home />
+        },
+        {
             path: "/login",
             element: <Login />
         },

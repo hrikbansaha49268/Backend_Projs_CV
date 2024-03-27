@@ -1,15 +1,27 @@
 const { Router } = require('express');
 const Quotes = require('../Database/models/Quotes');
+const User = require('../Database/models/User');
 const { tokenVerification } = require('../utilities/tokenization');
 
 const protectedRouter = Router();
+
+protectedRouter.get('/api/allquotes', async (req, res) => {
+    let quotesList = null;
+    const users = await User.find();
+    users.forEach(async e => {
+        quotesList = await Quotes.findOne({ email: e.email });
+        // authorsQuotes.quotes.forEach(elem => {
+        //     quotesList.push({ theQuote: e.name, author: elem });
+        // });
+    });
+    res.status(200).send(quotesList);
+});
 
 protectedRouter.get('/api/quote', async (req, res) => {
     try {
         const token = req.headers['x-access-token'];
         const decoded = tokenVerification(token);
         const email = decoded.email;
-        // TODO: Fix update quote
         const user = await Quotes.findOne({ email: email });
         res.status(200).json({ status: 'ok', quotes: user.quotes });
     } catch (error) {
