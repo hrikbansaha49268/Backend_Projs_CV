@@ -5,15 +5,18 @@ const { tokenVerification } = require('../utilities/tokenization');
 
 const protectedRouter = Router();
 
+// TODO: Merge the quotes and users in one
+
 protectedRouter.get('/api/allquotes', async (req, res) => {
-    let quotesList = null;
+    const quotesList = [];
     const users = await User.find();
     users.forEach(async e => {
-        quotesList = await Quotes.findOne({ email: e.email });
-        // authorsQuotes.quotes.forEach(elem => {
-        //     quotesList.push({ theQuote: e.name, author: elem });
-        // });
+        const allQuotes = await Quotes.findOne({ email: e.email });
+        allQuotes.quotes.forEach(elem => {
+            quotesList.push({ author: e.name, theQuote: elem.quote })
+        });
     });
+    console.log(quotesList)
     res.status(200).send(quotesList);
 });
 
