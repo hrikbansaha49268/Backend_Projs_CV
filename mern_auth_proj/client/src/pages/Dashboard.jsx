@@ -1,10 +1,8 @@
 import { decodeToken } from 'react-jwt';
-import { useNavigation } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 
 const Dashboard = () => {
 
-    const history = useNavigation();
     const [quotes, setQuote] = useState([]);
     const [tempQuote, setTempQuote] = useState('');
 
@@ -14,7 +12,7 @@ const Dashboard = () => {
             const user = decodeToken(token);
             if (!user) {
                 localStorage.removeItem('token');
-                history('/login', { replace: true });
+                window.location.href = '/login';
             } else {
                 populateQuote();
             };
@@ -50,8 +48,9 @@ const Dashboard = () => {
         });
         const data = await req.json();
         if (data.status === 'ok') {
-            setQuote(tempQuote);
+            quotes.push(tempQuote);
             setTempQuote('');
+            populateQuote();
         } else {
             alert(data.error);
         };
