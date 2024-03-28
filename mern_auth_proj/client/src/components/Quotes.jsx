@@ -8,8 +8,7 @@ const Quotes = () => {
         try {
             const req = await fetch('http://localhost:8080/api/allquotes');
             const data = await req.json();
-            setQuotes(...data);
-            console.log({ myquotes: quotes });
+            setQuotes([...data]);
         } catch (error) {
             console.log(error);
         };
@@ -22,7 +21,7 @@ const Quotes = () => {
 
     return (
         <ul className="grid grid-cols-3 gap-4 w-3/4 mx-auto">
-            {quotes.length > 0 ? quotes.map((e, i) => <Quote />) : "None is there"}
+            {quotes.map((e, i) => <li key={i}><Quote quotedata={e} /></li>)}
         </ul>
     );
 };
