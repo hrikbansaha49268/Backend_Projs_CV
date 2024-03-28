@@ -1,6 +1,5 @@
 const { Router } = require('express');
-const User = require('../Database/models/User');
-const Quotes = require('../Database/models/Quotes');
+const User = require('../Database/Schema');
 const { tokenSign } = require('../utilities/tokenization');
 const { passwordHasher, passwordChecker } = require('../utilities/passwordUtil');
 
@@ -16,10 +15,6 @@ authRouter.post('/api/register', async (req, res) => {
                 password: passwordHasher(req.body.password)
             });
             user.save();
-            const user_quotes = await Quotes.create({
-                email: req.body.email
-            });
-            user_quotes.save();
             res.status(200).send({ status: 'ok', user: user });
         } catch (error) {
             res.status(500).json({ status: 'error', error: 'Internal Server Error' });
@@ -32,9 +27,19 @@ authRouter.post('/api/register', async (req, res) => {
 authRouter.post('/api/login', async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-        const isPasswordCorrect = passwordChecker({ plainPass: req.body.password, hashedPass: user.password });
+        const isPasswordCorrect = passwordChecker({
+            plainPass: req.body.password,
+            hashedPass: user.password
+        });
         if (isPasswordCorrect) {
-            res.status(200).send({ status: 'ok', user: tokenSign({ email: req.body.email, name: user.name }) });
+            res.status(200).send({
+                status: 'ok', user: tokenSign(
+                    {
+                        email: req.body.email,
+                        name: user.name
+                    }
+                )
+            });
         } else {
             res.status(401).json({ status: 'error', user: false });
         };

@@ -1,23 +1,24 @@
 const { Router } = require('express');
-const Quotes = require('../Database/models/Quotes');
-const User = require('../Database/models/User');
+const User = require('../Database/Schema');
 const { tokenVerification } = require('../utilities/tokenization');
 
 const protectedRouter = Router();
 
-// TODO: Merge the quotes and users in one
-
 protectedRouter.get('/api/allquotes', async (req, res) => {
-    const quotesList = [];
-    const users = await User.find();
-    users.forEach(async e => {
-        const allQuotes = await Quotes.findOne({ email: e.email });
-        allQuotes.quotes.forEach(elem => {
-            quotesList.push({ author: e.name, theQuote: elem.quote })
+    try {
+        const quotesList = [];
+        const users = await User.find();
+        users.forEach(e => {
+            e.quotes.forEach(elem =>
+                quotesList.push({
+                    theQuote: elem.quote,
+                    author: e.name
+                }));
         });
-    });
-    console.log(quotesList)
-    res.status(200).send(quotesList);
+        res.status(200).send(quotesList);
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: 'Server Internal Error' });
+    };
 });
 
 protectedRouter.get('/api/quote', async (req, res) => {
@@ -25,7 +26,7 @@ protectedRouter.get('/api/quote', async (req, res) => {
         const token = req.headers['x-access-token'];
         const decoded = tokenVerification(token);
         const email = decoded.email;
-        const user = await Quotes.findOne({ email: email });
+        const user = await User.findOne({ email: email });
         res.status(200).json({ status: 'ok', quotes: user.quotes });
     } catch (error) {
         console.log(error);
@@ -39,7 +40,7 @@ protectedRouter.post('/api/quote', async (req, res) => {
         const token = req.headers['x-access-token'];
         const decoded = tokenVerification(token);
         const email = decoded.email;
-        await Quotes.updateOne(
+        await User.updateOne(
             { email: email },
             { $push: { quotes: { quote: req.body.quote } } }
         );
