@@ -33,7 +33,8 @@ authRouter.post('/api/login', async (req, res) => {
         });
         if (isPasswordCorrect) {
             res.status(200).send({
-                status: 'ok', user: tokenSign(
+                status: 'ok',
+                user: tokenSign(
                     {
                         email: req.body.email,
                         name: user.name

@@ -1,5 +1,6 @@
 import { decodeToken } from 'react-jwt';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import Quote from '../components/Quote';
 
 const Dashboard = () => {
 
@@ -55,27 +56,16 @@ const Dashboard = () => {
         };
     };
 
-    const logoutSession = () => {
-        localStorage.removeItem('token');
-        window.location.href = "/login";
-    };
-
     return (
-        <div className='flex flex-col justify-center w-full h-screen'>
+        <div className='flex flex-col justify-center w-full h-[80vh]'>
             <h1 className='text-5xl text-center flex justify-center items-center h-[20vh] uppercase font-extrabold tracking-wide font-serif text-blue-800'>
                 Your quote
             </h1>
-            <button className='bg-blue-600 absolute left-4 top-4 text-white px-6 py-2 self-center rounded-md'
-                onClick={logoutSession}>
-                Logout
-            </button>
-            {quotes.map((e, i) => {
-                return (
-                    <h1 key={i}>{e.quote}</h1>
-                );
-            })}
-            <form className='flex flex-col justify-around h-1/2 w-1/3 mx-auto' onSubmit={updateQuote}>
-                <input className='py-4 pl-4 outline-none border-b border-blue-600 placeholder:text-blue-600 focus:bg-blue-600 focus:bg-opacity-5'
+            <div className="grid grid-cols-3 w-3/4 mx-auto gap-6">
+                {quotes.map((e, i) => <Quote key={i} quotedata={{ theQuote: e.quote, author: "You" }} />)}
+            </div>
+            <form className='flex justify-around items-center gap-x-8 h-1/2 w-3/4 mx-auto' onSubmit={updateQuote}>
+                <input className='py-4 pl-4 outline-none border-b border-blue-600 placeholder:text-blue-600 focus:bg-blue-600 focus:bg-opacity-5 w-full h-fit'
                     type="text"
                     placeholder="Quote"
                     value={tempQuote}

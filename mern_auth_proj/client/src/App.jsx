@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import About from "./pages/About";
 
 const App = () => {
 
@@ -14,7 +15,7 @@ const App = () => {
         },
         {
             path: "/about",
-            element: <Home />
+            element: <About />
         },
         {
             path: "/login",
