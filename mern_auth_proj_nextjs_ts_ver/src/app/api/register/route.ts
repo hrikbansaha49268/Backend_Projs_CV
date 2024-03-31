@@ -1,8 +1,8 @@
 import { connectMongo } from "@/Database/Connector";
-import { NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
 
-export async function POST(request) {
+export async function POST(response: NextApiResponse, request: NextApiRequest) {
     const dbConnection = await connectMongo();
     if (dbConnection) {
         const user = {
@@ -11,14 +11,14 @@ export async function POST(request) {
             password: request.body.password
         };
         if (user) {
-            return NextResponse.json({ ...user });
+            return response.status(200).json({ ...user });
         } else {
-            return NextResponse.json({
+            return response.status(404).json({
                 status: 'error',
                 msg: "User not found"
             });
         }
     } else {
-        return NextResponse.json({ status: 'error', msg: 'DB not connected' });
+        return response.status(500).json({ status: 'error', msg: 'DB not connected' });
     }
 };
