@@ -1,24 +1,36 @@
-import { connectMongo } from "@/Database/Connector";
-import { NextApiRequest, NextApiResponse } from "next";
+import User from "@/Database/Schema";
+import connectMongo from "@/Database/Connector";
+import { passwordHasher } from "@/utilities/passwordUtil";
 
 
-export async function POST(response: NextApiResponse, request: NextApiRequest) {
+export async function POST(request: Request) {
     const dbConnection = await connectMongo();
     if (dbConnection) {
-        const user = {
-            name: request.body.name,
-            email: request.body.email,
-            password: request.body.password
-        };
-        if (user) {
-            return response.status(200).json({ ...user });
+        const userBody = await request.json();
+        if (userBody) {
+            const userExists = await User.exists({ email: userBody.email });
+            if (!userExists) {
+                try {
+                    const user = await User.create({
+                        name: userBody.name,
+                        email: userBody.email,
+                        password: passwordHasher(userBody.password)
+                    });
+                    user.save();
+                    return Response.json({ status: 'ok', user: user });
+                } catch (error) {
+                    return Response.json({ status: 'error', error: 'Internal Server Error' });
+                };
+            } else {
+                return Response.json({ status: 'error', error: 'Duplicate Email' });
+            };
         } else {
-            return response.status(404).json({
+            return Response.json({
                 status: 'error',
                 msg: "User not found"
             });
         }
     } else {
-        return response.status(500).json({ status: 'error', msg: 'DB not connected' });
+        return Response.json({ status: 'error', msg: 'DB not connected' });
     }
 };
