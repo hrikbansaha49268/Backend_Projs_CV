@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import Quote from "./Quote";
 
@@ -26,4 +27,4 @@ const Quotes = () => {
     );
 };
 
-export default Quotes
+export default Quotes;

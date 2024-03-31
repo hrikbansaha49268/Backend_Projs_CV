@@ -1,10 +1,7 @@
+"use client";
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 
 function Register() {
-
-    const history = useNavigate();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -20,7 +17,7 @@ function Register() {
         const data = await resp.json();
 
         if (data.status === 'ok') {
-            history('/login', { replace: true });
+            window.location.href = "/login"
         }
     };
 
