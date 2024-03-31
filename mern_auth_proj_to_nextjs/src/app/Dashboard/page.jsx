@@ -1,6 +1,6 @@
 import { decodeToken } from 'react-jwt';
 import React, { useEffect, useState } from 'react';
-import Quote from '../components/Quote';
+import Quote from '@/components/Quote';
 
 const Dashboard = () => {
 
@@ -23,7 +23,7 @@ const Dashboard = () => {
     }, []);
 
     async function populateQuote() {
-        const req = await fetch('http://localhost:8080/api/quote', {
+        const req = await fetch(`http://localhost:${process.env.PORT}/api/quote`, {
             headers: { 'x-access-token': localStorage.getItem('token') },
         });
         const data = await req.json();
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
     async function updateQuote(event) {
         event.preventDefault();
-        const req = await fetch('http://localhost:8080/api/quote', {
+        const req = await fetch(`http://localhost:${process.env.PORT}/api/quote`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ const Quotes = () => {
 
     const populateQuotes = async () => {
         try {
-            const req = await fetch('http://localhost:8080/api/allquotes');
+            const req = await fetch(`http://localhost:${process.env.PORT}/api/allquotes`);
             const data = await req.json();
             setQuotes([...data]);
         } catch (error) {

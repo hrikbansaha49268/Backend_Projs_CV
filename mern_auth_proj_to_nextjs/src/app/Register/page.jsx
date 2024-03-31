@@ -9,16 +9,17 @@ function Register() {
 
     async function registerUser(event) {
         event.preventDefault();
-        const resp = await fetch('http://localhost:8080/api/register', {
+        const resp = await fetch(`http://localhost:${process.env.PORT}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
         });
         const data = await resp.json();
+        console.log(data);
 
-        if (data.status === 'ok') {
-            window.location.href = "/login"
-        }
+        // if (data.status === 'ok') {
+        //     window.location.href = "/login"
+        // }
     };
 
     return (
