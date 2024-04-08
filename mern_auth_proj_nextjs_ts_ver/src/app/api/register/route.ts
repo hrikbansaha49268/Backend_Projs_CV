@@ -1,36 +1,48 @@
 import User from "@/Database/Schema";
 import connectMongo from "@/Database/Connector";
 import { passwordHasher } from "@/utilities/passwordUtil";
+import { NextResponse } from "next/server";
 
 
 export async function POST(request: Request) {
     const dbConnection = await connectMongo();
     if (dbConnection) {
-        const userBody = await request.json();
-        if (userBody) {
-            const userExists = await User.exists({ email: userBody.email });
+        const { name, email, password } = await request.json();
+        if (name && email && password) {
+            const userExists = await User.exists({ email: email });
             if (!userExists) {
                 try {
                     const user = await User.create({
-                        name: userBody.name,
-                        email: userBody.email,
-                        password: passwordHasher(userBody.password)
+                        name, email,
+                        password: passwordHasher(password)
                     });
                     user.save();
-                    return Response.json({ status: 'ok', user: user });
+                    return NextResponse.json(
+                        { ...user._doc },
+                        { status: 201, statusText: 'User created' }
+                    );
                 } catch (error) {
-                    return Response.json({ status: 'error', error: 'Internal Server Error' });
+                    return NextResponse.json(
+                        { error: 'Internal Server Error' },
+                        { status: 500 }
+                    );
                 };
             } else {
-                return Response.json({ status: 'error', error: 'Duplicate Email' });
+                return NextResponse.json(
+                    { error: 'This email exists already' },
+                    { status: 409, statusText: 'Duplicate Email' }
+                );
             };
         } else {
-            return Response.json({
-                status: 'error',
-                msg: "User not found"
-            });
-        }
+            return NextResponse.json(
+                { error: 'Data is missing' },
+                { status: 204, statusText: 'Content rejected' }
+            );
+        };
     } else {
-        return Response.json({ status: 'error', msg: 'DB not connected' });
-    }
+        return NextResponse.json(
+            { error: 'Database not connected' },
+            { status: 500, statusText: 'Internal Server Error' }
+        );
+    };
 };
