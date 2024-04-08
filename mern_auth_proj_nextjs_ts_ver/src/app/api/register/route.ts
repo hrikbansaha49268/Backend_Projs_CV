@@ -40,9 +40,13 @@ export async function POST(request: Request) {
             );
         };
     } else {
+<<<<<<< HEAD
         return NextResponse.json(
             { error: 'Database not connected' },
             { status: 500, statusText: 'Internal Server Error' }
         );
+=======
+        return Response.json({ status: 'error', msg: 'DB not connected' });
+>>>>>>> ec599f3cdc93c50b99dbda97c5da701be4a67844
     };
 };
