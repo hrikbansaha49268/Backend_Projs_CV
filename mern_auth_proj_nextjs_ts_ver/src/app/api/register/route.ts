@@ -32,5 +32,5 @@ export async function POST(request: Request) {
         }
     } else {
         return Response.json({ status: 'error', msg: 'DB not connected' });
-    }
+    };
 };
